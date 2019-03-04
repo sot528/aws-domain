@@ -1,0 +1,49 @@
+Description: >
+  Domain registration.
+
+Parameters:
+  DomainName:
+    Type: String
+  RecordSetA_IP:
+    Type: String
+
+Resources:
+  # Route53
+  HostedZone:
+    Type: "AWS::Route53::HostedZone"
+    Properties:
+      Name: !Sub [DomainName, '.']
+  RecordSetA:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: !Sub [DomainName, '.']
+      Comment: DNS A record.
+      Name: !Sub [DomainName, '.']
+      Type: A
+      TTL: '900'
+      ResourceRecords:
+        - !Ref RecordSetA_IP
+
+#  # ACM
+#  Certificate:
+#    Type: AWS::CertificateManager::Certificate
+#    Properties:
+#      DomainName: !Ref DomainName
+#
+#  # Cloud Front
+#  Distribution:
+#    Type: AWS::CloudFront::Distribution
+#    Properties:
+#      DistributionConfig:
+#        DefaultCacheBehavior:
+#          LambdaFunctionAssociations:
+#            - EventType: string-value
+#              LambdaFunctionARN: string-value
+#        IPV6Enabled: boolean-value
+#        Origins:
+#          - CustomOriginConfig:
+#              OriginKeepaliveTimeout: integer-value
+#              OriginReadTimeout: integer-value
+#      Tags:
+#        - Key: string-value
+#          Value: string-value
